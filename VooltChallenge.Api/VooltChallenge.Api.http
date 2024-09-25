@@ -1,0 +1,23 @@
+@Api_HostAddress = http://localhost:5183
+
+// Get all ads
+GET {{Api_HostAddress}}/api/ads/
+Accept: application/json
+
+###
+
+// Create or Update an ad
+POST {{Api_HostAddress}}/api/ads/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 1,
+  "description": "Ad Description",
+  "status": "Active",
+  "balance": 100.0,
+  "externalId": "extid_123",
+  "totalLeads": "50"
+}
+
+###
