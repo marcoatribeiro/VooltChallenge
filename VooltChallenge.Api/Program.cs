@@ -1,6 +1,7 @@
 using VooltChallenge.Api.Endpoints;
 using VooltChallenge.Api.Mapping;
 using VooltChallenge.Application;
+using VooltChallenge.Application.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +50,8 @@ app.UseOutputCache();
 app.UseMiddleware<ValidationMappingMiddleware>();
 app.MapApiEndpoints();
 
-//var dbInitializer = app.Services.GetRequiredService<DbInitializer>();
-//await dbInitializer.InitializeAsync();
+// Seed the database
+await using var scope = app.Services.CreateAsyncScope();
+await DataSeeder.InitializeAsync(scope.ServiceProvider);
 
 app.Run();

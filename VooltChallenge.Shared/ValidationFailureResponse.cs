@@ -3,7 +3,6 @@
 public sealed class ValidationFailureResponse
 {
     public required IEnumerable<ValidationResponse> Errors { get; init; }
-
     
     public Dictionary<string, List<string>> ValidationErrorsAsDictionary =>
         Errors.ToDictionary(
