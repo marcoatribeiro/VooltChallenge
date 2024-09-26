@@ -1,5 +1,9 @@
-﻿@using VooltChallenge.Ui.Client.Models
+﻿@using VooltChallenge.Shared
+@using VooltChallenge.Ui.Client.Models
+@using VooltChallenge.Ui.Client.Services
+@using VooltChallenge.Ui.Client.Validation
 @implements IDialogContentComponent<AdModel>
+@inject IAdService AdService
 
 <FluentDialogHeader ShowDismiss="true">
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
@@ -11,25 +15,37 @@
 </FluentDialogHeader>
 
 <FluentDialogBody>
-    <EditForm EditContext="@_editContext" FormName="simple_register">
-        <DataAnnotationsValidator />
+    <EditForm EditContext="@_editContext" FormName="ad-edit">
+        <CustomValidation @ref="_customValidation" />
 
-        @* <FluentLabel Style="margin-bottom: 16px;">
-            Your name must be between 3 and 20 characters long,
-            and your age between 1 and 99.
-        </FluentLabel> *@
-
-        <FluentTextField Name="ad_description"
-                         @bind-Value="@Content.Description"
-                         Label="Description"
-                         Required />
-        <FluentNumberField Name="ad_totalleads"
-                           @bind-Value="@Content.TotalLeads"
-                           Label="Total Leads"
-                           Required />
+        <FluentGrid Spacing="3" AdaptiveRendering="true" Justify="JustifyContent.FlexStart">
+            <FluentGridItem xs="12">
+                <FluentTextField Name="ad-description" @bind-Value="@Content.Description" Label="Description"
+                                 Style="width: 100%" Appearance="FluentInputAppearance.Filled" Required/>
+            </FluentGridItem>
+            <FluentGridItem xs="6">
+                <FluentSelect TOption="AdStatus" Id="ad-status" @bind-SelectedOption="@Content.Status" 
+                              Value="@Content.Status.ToString()"
+                              Label="Status" Items="@(Enum.GetValues<AdStatus>())" 
+                              Style="width: 100%; min-width: 0" Appearance="Appearance.Filled"
+                              OptionValue="@(s => s.ToString())" OptionText="@(s => s.ToString())" Required/>
+            </FluentGridItem>
+            <FluentGridItem xs="6">
+                <FluentNumberField Name="ad-balance" @bind-Value="@Content.Balance" Label="Balance"
+                                   Min="0" Appearance="FluentInputAppearance.Filled" Style="width: 100%"/>
+            </FluentGridItem>
+            <FluentGridItem xs="6">
+                <FluentTextField Name="ad-external-id" @bind-Value="@Content.ExternalId" Label="External Id"
+                                 Appearance="FluentInputAppearance.Filled" Style="width: 100%"/>
+            </FluentGridItem>
+            <FluentGridItem xs="6">
+                <FluentNumberField Name="ad-totalleads" @bind-Value="@Content.TotalLeads" Label="Total Leads"
+                                   Appearance="FluentInputAppearance.Filled" Style="width: 100%" Required/>
+            </FluentGridItem>
+        </FluentGrid>
 
         <div style="color: var(--error);">
-            <FluentValidationSummary />
+            <FluentValidationSummary/>
         </div>
     </EditForm>
 </FluentDialogBody>
@@ -42,6 +58,7 @@
 @code
 {
     private EditContext _editContext = default!;
+    private CustomValidation? _customValidation;
 
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
@@ -57,11 +74,23 @@
     private async Task SaveAsync()
     {
         if (_editContext.Validate())
-            await Dialog.CloseAsync(Content);
+            await CreateOrUpdateAdAndHandleErrorsAsync(Content);
     }
 
     private Task CancelAsync()
     {
         return Dialog.CancelAsync();
+    }
+
+    private async Task CreateOrUpdateAdAndHandleErrorsAsync(AdModel model)
+    {
+        (bool Success, ValidationFailureResponse? FailureResponse) response = await AdService.CreateOrUpdateAsync(model);
+        if (!response.Success)
+        {
+            _customValidation?.DisplayErrors(response.FailureResponse!.ValidationErrorsAsDictionary);
+            return;
+        }
+
+        await Dialog.CloseAsync(Content);
     }
 }

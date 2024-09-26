@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using VooltChallenge.Application.Database;
 using VooltChallenge.Application.Repositories;
@@ -12,7 +13,7 @@ public static class ApplicationServiceCollectionExtensions
     {
         services.AddScoped<IAdRepository, AdRepository>();
         services.AddScoped<IAdService, AdService>();
-        // services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
+        services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
         return services;
     }
 

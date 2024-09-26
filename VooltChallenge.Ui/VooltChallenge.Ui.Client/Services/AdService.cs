@@ -1,6 +1,8 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using VooltChallenge.Shared;
 using VooltChallenge.Ui.Client.Models;
 
 namespace VooltChallenge.Ui.Client.Services;
@@ -16,11 +18,17 @@ public sealed class AdService : IAdService
         _httpClient = httpClientFactory.CreateClient("WebApi");
     }
 
-    public async Task<bool> CreateOrUpdateAsync(AdModel ad, CancellationToken token = default)
+    public async Task<(bool Success, ValidationFailureResponse? FailureResponse)> CreateOrUpdateAsync(AdModel ad, CancellationToken token = default)
     {
         var response = await _httpClient.PostAsJsonAsync($"{_apiBaseRoute}/ads", ad, GetJsonSerializerOptions(), token);
+        if (response.StatusCode == HttpStatusCode.BadRequest)
+        {
+            var failureResponse = await response.Content.ReadFromJsonAsync<ValidationFailureResponse>(GetJsonSerializerOptions(), token);
+            return (false, failureResponse);
+        }
+
         response.EnsureSuccessStatusCode();
-        return true;
+        return (true, null);
     }
 
     public async Task<AdsListModel> GetAllAsync(CancellationToken token = default)
@@ -28,7 +36,7 @@ public sealed class AdService : IAdService
         return await _httpClient.GetFromJsonAsync<AdsListModel>($"{_apiBaseRoute}/ads", GetJsonSerializerOptions(), token) ?? new AdsListModel();
     }
 
-    private JsonSerializerOptions GetJsonSerializerOptions()
+    private static JsonSerializerOptions GetJsonSerializerOptions()
     {
         var options = new JsonSerializerOptions
         {

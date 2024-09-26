@@ -17,7 +17,7 @@
 }
 else
 {
-    <FluentButton Appearance="Appearance.Accent" @onclick="@(() => OpenDetails(new AdModel(LastId + 1), inserting: true))">Create New Ad</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" @onclick="@(() => OpenDetails(new AdModel(LastId + 1), creating: true))">Create New Ad</FluentButton>
 
     if (_adsList.TotalCount == 0)
     {
@@ -33,7 +33,7 @@ else
             <PropertyColumn Title="Status" Property="@(x => x.Status)" Sortable="true" Align="Align.Center" />
             <PropertyColumn Title="Total Leads" Property="@(x => x.TotalLeads)" Sortable="true" Align="Align.Center" />
             <TemplateColumn Title="Action" Align="Align.Center">
-                <FluentButton Appearance="Appearance.Accent" @onclick="@(() => OpenDetails(context, inserting: false))">Details</FluentButton>
+                <FluentButton Appearance="Appearance.Accent" @onclick="@(() => OpenDetails(context, creating: false))">Details</FluentButton>
             </TemplateColumn>
         </FluentDataGrid>
     }
@@ -54,20 +54,6 @@ else
         StateHasChanged();
     }
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     _persistingSubscription = ApplicationState.RegisterOnPersisting(PersistData);
-
-    //     if (!ApplicationState.TryTakeFromJson<AdsListModel>(nameof(_adsList), out var restoredData))
-    //     {
-    //         _adsList = await AdService.GetAllAsync();
-    //     }
-    //     else
-    //     {
-    //         _adsList = restoredData!;
-    //     }
-    // }
-
     private Task PersistData()
     {
         ApplicationState.PersistAsJson(nameof(_adsList), _adsList);
@@ -76,7 +62,7 @@ else
 
     void IDisposable.Dispose() => _persistingSubscription.Dispose();
 
-    private async Task OpenDetails(AdModel context, bool inserting)
+    private async Task OpenDetails(AdModel context, bool creating)
     {
         var dialog = await DialogService.ShowDialogAsync<AdDialog>(context, new DialogParameters()
         {
@@ -90,8 +76,7 @@ else
         if (!result.Cancelled && result.Data is not null)
         {
             var ad = (AdModel)result.Data;
-            await AdService.CreateOrUpdateAsync(ad);
-            if (inserting)
+            if (creating)
                 _adsList!.AddItem(ad);
         }
     }
