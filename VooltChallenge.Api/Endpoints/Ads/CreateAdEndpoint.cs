@@ -19,10 +19,10 @@ internal static class CreateAdEndpoint
                 var ad = request.MapToAd();
                 await adService.CreateOrUpdateAsync(ad, token);
                 await outputCacheStore.EvictByTagAsync(OutputCache.AdsTag, token);
-                return TypedResults.Created();
+                return TypedResults.Ok();
             })
             .WithName(Name)
-            .Produces<AdResponse>(StatusCodes.Status201Created);
+            .Produces<AdResponse>(StatusCodes.Status200OK);
             //.Produces<ValidationFailureResponse>(StatusCodes.Status400BadRequest);
         return app;
     }

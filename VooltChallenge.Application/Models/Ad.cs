@@ -1,4 +1,6 @@
-﻿namespace VooltChallenge.Application.Models;
+﻿using VooltChallenge.Shared;
+
+namespace VooltChallenge.Application.Models;
 
 public sealed class Ad
 {

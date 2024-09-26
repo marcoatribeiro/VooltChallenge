@@ -1,4 +1,4 @@
-﻿namespace VooltChallenge.Application.Models;
+﻿namespace VooltChallenge.Shared;
 
 public enum AdStatus
 {

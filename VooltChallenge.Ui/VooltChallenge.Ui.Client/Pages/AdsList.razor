@@ -1,0 +1,98 @@
+﻿@rendermode InteractiveWebAssembly
+@using VooltChallenge.Ui.Client.Models
+@using VooltChallenge.Ui.Client.Services
+@implements IDisposable
+@inject PersistentComponentState ApplicationState
+@inject IDialogService DialogService
+@inject IAdService AdService
+
+<FluentDialogProvider />
+
+@if (_adsList == null)
+{
+    <div class="d-flex">
+        <FluentProgress />
+        <p><em>Loading...</em></p>
+    </div>
+}
+else
+{
+    <FluentButton Appearance="Appearance.Accent" @onclick="@(() => OpenDetails(new AdModel(LastId + 1), inserting: true))">Create New Ad</FluentButton>
+
+    if (_adsList.TotalCount == 0)
+    {
+        <div style="width: 100%">
+            <FluentLabel Typo="Typography.Subject" Weight="FontWeight.Bold" Alignment="HorizontalAlignment.Center">No Ads found</FluentLabel>
+        </div>
+    }
+    else
+    {
+        <FluentDataGrid Id="weathergrid" Items="@DataGridItems" GridTemplateColumns="1fr 1fr 1fr 1fr 1fr" TGridItem="AdModel">
+            <PropertyColumn Title="Id" Property="@(x => x.Id)" Sortable="true" Align="Align.Start" />
+            <PropertyColumn Title="Summary" Property="@(x => x.Description)" Sortable="true" Align="Align.Start" />
+            <PropertyColumn Title="Status" Property="@(x => x.Status)" Sortable="true" Align="Align.Center" />
+            <PropertyColumn Title="Total Leads" Property="@(x => x.TotalLeads)" Sortable="true" Align="Align.Center" />
+            <TemplateColumn Title="Action" Align="Align.Center">
+                <FluentButton Appearance="Appearance.Accent" @onclick="@(() => OpenDetails(context, inserting: false))">Details</FluentButton>
+            </TemplateColumn>
+        </FluentDataGrid>
+    }
+}
+
+@code {
+    private AdsListModel? _adsList;
+    private PersistingComponentStateSubscription _persistingSubscription;
+
+    private IQueryable<AdModel> DataGridItems => _adsList?.Items.AsQueryable() ?? Enumerable.Empty<AdModel>().AsQueryable();
+    private int LastId => _adsList?.Items.MaxBy(x => x.Id)?.Id ?? 0;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+
+        _adsList = await AdService.GetAllAsync();
+        StateHasChanged();
+    }
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     _persistingSubscription = ApplicationState.RegisterOnPersisting(PersistData);
+
+    //     if (!ApplicationState.TryTakeFromJson<AdsListModel>(nameof(_adsList), out var restoredData))
+    //     {
+    //         _adsList = await AdService.GetAllAsync();
+    //     }
+    //     else
+    //     {
+    //         _adsList = restoredData!;
+    //     }
+    // }
+
+    private Task PersistData()
+    {
+        ApplicationState.PersistAsJson(nameof(_adsList), _adsList);
+        return Task.CompletedTask;
+    }
+
+    void IDisposable.Dispose() => _persistingSubscription.Dispose();
+
+    private async Task OpenDetails(AdModel context, bool inserting)
+    {
+        var dialog = await DialogService.ShowDialogAsync<AdDialog>(context, new DialogParameters()
+        {
+            Height = "400px",
+            Title = $"Edit Ad {context.Id}",
+            PreventDismissOnOverlayClick = true,
+            PreventScroll = true,
+        });
+
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data is not null)
+        {
+            var ad = (AdModel)result.Data;
+            await AdService.CreateOrUpdateAsync(ad);
+            if (inserting)
+                _adsList!.AddItem(ad);
+        }
+    }
+}

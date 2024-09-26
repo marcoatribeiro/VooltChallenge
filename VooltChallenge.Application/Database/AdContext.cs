@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VooltChallenge.Application.Models;
+using VooltChallenge.Shared;
 
 namespace VooltChallenge.Application.Database;
 

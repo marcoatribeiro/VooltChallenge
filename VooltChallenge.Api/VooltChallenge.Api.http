@@ -1,4 +1,5 @@
-@Api_HostAddress = http://localhost:5183
+// The below URL should be the same as the one in the launchSettings.json and appsettings.json files
+@Api_HostAddress = http://localhost:5276
 
 // Get all ads
 GET {{Api_HostAddress}}/api/ads/

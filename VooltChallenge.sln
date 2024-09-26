@@ -9,6 +9,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VooltChallenge.Application"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VooltChallenge.Contracts", "VooltChallenge.Contracts\VooltChallenge.Contracts.csproj", "{78F603F0-4CA9-4FF9-BAE5-6D2E044C7729}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{CF159ACA-BCF3-463C-A931-4637AC0806AF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{6846FBBD-1E14-4A1B-B91C-5B9FE4D79BEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VooltChallenge.Ui", "VooltChallenge.Ui\VooltChallenge.Ui\VooltChallenge.Ui.csproj", "{B4A2216E-6CEC-40FE-AA13-D8CA3A3D337B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VooltChallenge.Ui.Client", "VooltChallenge.Ui\VooltChallenge.Ui.Client\VooltChallenge.Ui.Client.csproj", "{81B654CB-7D28-4F1C-A6E9-85B6ACD99A09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VooltChallenge.Shared", "VooltChallenge.Shared\VooltChallenge.Shared.csproj", "{6BB15977-D53C-4032-86AF-7FC3C0291CD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +37,28 @@ Global
 		{78F603F0-4CA9-4FF9-BAE5-6D2E044C7729}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78F603F0-4CA9-4FF9-BAE5-6D2E044C7729}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78F603F0-4CA9-4FF9-BAE5-6D2E044C7729}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4A2216E-6CEC-40FE-AA13-D8CA3A3D337B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4A2216E-6CEC-40FE-AA13-D8CA3A3D337B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4A2216E-6CEC-40FE-AA13-D8CA3A3D337B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4A2216E-6CEC-40FE-AA13-D8CA3A3D337B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81B654CB-7D28-4F1C-A6E9-85B6ACD99A09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81B654CB-7D28-4F1C-A6E9-85B6ACD99A09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81B654CB-7D28-4F1C-A6E9-85B6ACD99A09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81B654CB-7D28-4F1C-A6E9-85B6ACD99A09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BB15977-D53C-4032-86AF-7FC3C0291CD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BB15977-D53C-4032-86AF-7FC3C0291CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BB15977-D53C-4032-86AF-7FC3C0291CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BB15977-D53C-4032-86AF-7FC3C0291CD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{22D2CD5A-DD9E-44F5-9969-8CE855D41BED} = {CF159ACA-BCF3-463C-A931-4637AC0806AF}
+		{480FCAD7-1526-4BE6-9651-E15446FEF98F} = {CF159ACA-BCF3-463C-A931-4637AC0806AF}
+		{78F603F0-4CA9-4FF9-BAE5-6D2E044C7729} = {CF159ACA-BCF3-463C-A931-4637AC0806AF}
+		{B4A2216E-6CEC-40FE-AA13-D8CA3A3D337B} = {6846FBBD-1E14-4A1B-B91C-5B9FE4D79BEC}
+		{81B654CB-7D28-4F1C-A6E9-85B6ACD99A09} = {6846FBBD-1E14-4A1B-B91C-5B9FE4D79BEC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63399AE9-E5ED-4F33-AEBD-BA1AD7EE438B}

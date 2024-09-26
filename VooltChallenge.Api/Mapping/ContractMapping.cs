@@ -1,6 +1,7 @@
 ﻿using VooltChallenge.Application.Models;
 using VooltChallenge.Contracts.Requests;
 using VooltChallenge.Contracts.Responses;
+using VooltChallenge.Shared;
 
 namespace VooltChallenge.Api.Mapping;
 

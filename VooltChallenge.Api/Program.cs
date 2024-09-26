@@ -13,6 +13,16 @@ builder.Services.AddDatabase("AdsDatabase");
 
 builder.Services.AddEndpointsApiExplorer();
 
+var backendUrl = builder.Configuration["BackendUrl"];
+
+// Add a CORS policy for the client
+builder.Services.AddCors(
+    options => options.AddDefaultPolicy(
+        policy => policy.WithOrigins(builder.Configuration["BackendUrl"] ?? "https://localhost:5276",
+                builder.Configuration["FrontendUrl"] ?? "https://localhost:5176")
+            .AllowAnyMethod()
+            .AllowAnyHeader()));
+
 builder.Services.AddOutputCache(x =>
 {
     x.AddBasePolicy(c => c.Cache());
@@ -30,6 +40,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 
