@@ -1,7 +1,4 @@
 ﻿@rendermode InteractiveWebAssembly
-@using VooltChallenge.Ui.Client.Models
-@using VooltChallenge.Ui.Client.Services
-@implements IDisposable
 @inject PersistentComponentState ApplicationState
 @inject IDialogService DialogService
 @inject IAdService AdService
@@ -41,7 +38,6 @@ else
 
 @code {
     private AdsListModel? _adsList;
-    private PersistingComponentStateSubscription _persistingSubscription;
 
     private IQueryable<AdModel> DataGridItems => _adsList?.Items.AsQueryable() ?? Enumerable.Empty<AdModel>().AsQueryable();
     private int LastId => _adsList?.Items.MaxBy(x => x.Id)?.Id ?? 0;
@@ -53,14 +49,6 @@ else
         _adsList = await AdService.GetAllAsync();
         StateHasChanged();
     }
-
-    private Task PersistData()
-    {
-        ApplicationState.PersistAsJson(nameof(_adsList), _adsList);
-        return Task.CompletedTask;
-    }
-
-    void IDisposable.Dispose() => _persistingSubscription.Dispose();
 
     private async Task OpenDetails(AdModel context, bool creating)
     {

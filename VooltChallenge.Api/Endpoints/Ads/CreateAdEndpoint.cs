@@ -13,7 +13,7 @@ internal static class CreateAdEndpoint
 
     public static IEndpointRouteBuilder MapCreateOrUpdateAd(this IEndpointRouteBuilder app)
     {
-        app.MapPost(ApiEndpoints.Ads.Create, async (
+        app.MapPost(ApiEndpoints.Ads.CreateOrUpdate, async (
                 CreateOrUpdateAdRequest request, IAdService adService,
                 IOutputCacheStore outputCacheStore, CancellationToken token) =>
             {

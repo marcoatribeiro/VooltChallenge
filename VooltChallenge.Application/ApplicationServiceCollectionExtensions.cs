@@ -21,7 +21,6 @@ public static class ApplicationServiceCollectionExtensions
         string databaseName)
     {
         services.AddDbContext<AdContext>(opt => opt.UseInMemoryDatabase(databaseName));
-        //services.AddSingleton<DbInitializer>();
         return services;
     }
 }
