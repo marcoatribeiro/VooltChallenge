@@ -80,3 +80,4 @@ The shared project contains items shared by both the backend and frontend projec
 - Add filtering, sorting and pagination for the list endpoint (and implement it in the frontend)
 - Add tests (unit, integration, architectural)
 - Create a CI/CD pipeline (e.g. GitHub Actions or Azure DevOps)
+- As this is a simple project, the backend was structured as using n-tier architecture. However, for larger applications, it would be advisable to refactor it to use another architectural style, such as Clean Architecture or Vertical Slices
